@@ -131,39 +131,39 @@ export default React.createClass({
         if (inFinalState) {
             if (status === "active") {
                 linksArray.push({
-                    label: "Suspend-test",
+                    label: "Suspend",
                     icon: "pause",
                     onClick: this.onSuspend
                 });
                 linksArray.push({
-                    label: "Stop-test",
+                    label: "Stop",
                     icon: "stop",
                     onClick: this.onStop
                 });
                 linksArray.push({
-                    label: "Reboot-test",
+                    label: "Reboot",
                     icon: "off",
                     onClick: this.onReboot
                 });
                 linksArray.push({
-                    label: "Redeploy-test",
+                    label: "Redeploy",
                     icon: "repeat",
                     onClick: this.onRedeploy
                 });
             } else if (status === "suspended") {
                 linksArray.push({
-                    label: "Resume-test",
+                    label: "Resume",
                     icon: "play",
                     onClick: this.onResume
                 });
                 linksArray.push({
-                    label: "Reboot-test",
+                    label: "Reboot",
                     icon: "off",
                     onClick: this.onReboot
                 });
             } else if (status === "shutoff") {
                 linksArray.push({
-                    label: "Start-test",
+                    label: "Start",
                     icon: "play",
                     onClick: this.onStart
                 });
@@ -206,7 +206,7 @@ export default React.createClass({
                 icon: null
             },
             {
-                label: "Open Web Shell",
+                label: "Open Web Shell :)",
                 icon: "console",
                 href: webShellUrl,
                 openInNewWindow: true,
@@ -216,7 +216,7 @@ export default React.createClass({
 
         if (webDesktopCapable && featureFlags.WEB_DESKTOP) {
             linksArray.push({
-                label: "Open Web Desktop",
+                label: "Open Web Desktop, m'kay",
                 icon: "sound-stereo",
                 onClick: this.onWebDesktop.bind(
                     this,
