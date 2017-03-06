@@ -206,7 +206,7 @@ export default React.createClass({
                 icon: null
             },
             {
-                label: "Open Web Shell :)",
+                label: "Open Web Shell",
                 icon: "console",
                 href: webShellUrl,
                 openInNewWindow: true,
@@ -216,7 +216,7 @@ export default React.createClass({
 
         if (webDesktopCapable && featureFlags.WEB_DESKTOP) {
             linksArray.push({
-                label: "Open Web Desktop, m'kay",
+                label: "Open Web Desktop",
                 icon: "sound-stereo",
                 onClick: this.onWebDesktop.bind(
                     this,
