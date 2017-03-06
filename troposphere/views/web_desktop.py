@@ -1,71 +1,45 @@
 import json
 import logging
 import time
+import uuid
+import hmac
+import hashlib
+import base64
+import requests
 
-from django.conf import settings
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseRedirect
-from django.http.request import UnreadablePostError
-from django.shortcuts import render, redirect, render_to_response
-from django.template import RequestContext
+guac_server = 'http://192.168.0.60:8080/guacamole'
+SECRET_KEY = 'secret'
 
-from itsdangerous import Signer, URLSafeTimedSerializer
+# Create UUID for connection ID
+conn_id = str(uuid.uuid4())
+base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
 
-logger = logging.getLogger(__name__)
+timestamp = int(round(time.time()*1000))
 
-SIGNED_SERIALIZER = URLSafeTimedSerializer(
-    settings.WEB_DESKTOP['signing']['SECRET_KEY'],
-    salt=settings.WEB_DESKTOP['signing']['SALT'])
+passwd = 'display'
 
-SIGNER = Signer(
-    settings.WEB_DESKTOP['fingerprint']['SECRET_KEY'],
-    salt=settings.WEB_DESKTOP['fingerprint']['SALT'])
+atmo_host = '192.168.0.60'
+atmo_username = 'calvinmclean'
 
+message = str(timestamp) + 'vnc' + atmo_host + '5902' + atmo_username + passwd
+signature = hmac.new(SECRET_KEY, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
 
-def _should_redirect():
-    return settings.WEB_DESKTOP['redirect']['ENABLED']
+print 'Message is: ' + message + '\n'
+print 'Signature is: ' + signature + '\n'
 
-def web_desktop(request):
-    """
-    Signs a redirect to transparent proxy for web desktop view.
-    """
-    template_params = {}
+request_string = ('timestamp=' + str(timestamp) +
+                 '&guac.port=5902&guac.username=' + atmo_username +
+                 '&guac.password=' + passwd +
+                 '&guac.protocol=vnc&signature=' + signature +
+                 '&guac.hostname=' + atmo_host +
+                 '&id=' + conn_id)
 
-    logger.info("POST body: %s" % request.POST)
-    if request.user.is_authenticated():
-        logger.info("user is authenticated, well done.")
-        sig = None
+print 'Request string is: ' + request_string + '\n'
 
-        if 'ipAddress' in request.POST:
-            ip_address = request.POST['ipAddress']
-            client_ip = request.META['REMOTE_ADDR']
+# Send request and record the result
+request_response = requests.post(guac_server + '/api/tokens', data=request_string)
+token = json.loads(request_response.content)['authToken']
 
-            logger.info("ip_address: %s" % ip_address)
-            logger.info("client_ip: %s" % client_ip)
+print 'Token is: ' + token + '\n'
 
-            client_ip_fingerprint = SIGNER.get_signature(client_ip)
-            browser_fingerprint = SIGNER.get_signature(''.join([
-                request.META['HTTP_USER_AGENT'],
-                request.META['HTTP_ACCEPT_LANGUAGE']]))
-
-            sig = SIGNED_SERIALIZER.dumps([ip_address,
-                client_ip_fingerprint,
-                browser_fingerprint])
-
-            url = '%s?token=%s&password=display' % (
-                settings.WEB_DESKTOP['redirect']['PROXY_URL'],
-                sig)
-
-            response = HttpResponseRedirect(url)
-            response.set_cookie('original_referer', request.META['HTTP_REFERER'],
-                domain=settings.WEB_DESKTOP['redirect']['COOKIE_DOMAIN'])
-
-            logger.info("redirect response: %s" % (response))
-
-            return response
-        else:
-            raise UnreadablePostError
-
-    else:
-        logger.info("not authenticated: \nrequest:\n %s" % request)
-        raise PermissionDenied
+print 'URL is: http://192.168.0.60:8080/guacamole/#/client/' + base64_conn_id + '?token=' + token
