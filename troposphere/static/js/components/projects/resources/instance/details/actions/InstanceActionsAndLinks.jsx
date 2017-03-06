@@ -131,39 +131,39 @@ export default React.createClass({
         if (inFinalState) {
             if (status === "active") {
                 linksArray.push({
-                    label: "Suspend",
+                    label: "Suspend-test",
                     icon: "pause",
                     onClick: this.onSuspend
                 });
                 linksArray.push({
-                    label: "Stop",
+                    label: "Stop-test",
                     icon: "stop",
                     onClick: this.onStop
                 });
                 linksArray.push({
-                    label: "Reboot",
+                    label: "Reboot-test",
                     icon: "off",
                     onClick: this.onReboot
                 });
                 linksArray.push({
-                    label: "Redeploy",
+                    label: "Redeploy-test",
                     icon: "repeat",
                     onClick: this.onRedeploy
                 });
             } else if (status === "suspended") {
                 linksArray.push({
-                    label: "Resume",
+                    label: "Resume-test",
                     icon: "play",
                     onClick: this.onResume
                 });
                 linksArray.push({
-                    label: "Reboot",
+                    label: "Reboot-test",
                     icon: "off",
                     onClick: this.onReboot
                 });
             } else if (status === "shutoff") {
                 linksArray.push({
-                    label: "Start",
+                    label: "Start-test",
                     icon: "play",
                     onClick: this.onStart
                 });
