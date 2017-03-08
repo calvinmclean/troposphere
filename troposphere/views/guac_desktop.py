@@ -19,7 +19,7 @@ base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
 timestamp = int(round(time.time()*1000))
 passwd = 'display'
 
-def web_desktop(request):
+def guac_desktop(request):
 
     if request.user.is_authenticated():
 
