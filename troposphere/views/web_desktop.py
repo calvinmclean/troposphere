@@ -16,14 +16,6 @@ from django.template import RequestContext
 
 from itsdangerous import Signer, URLSafeTimedSerializer
 
-# SIGNED_SERIALIZER = URLSafeTimedSerializer(
-#     settings.WEB_DESKTOP['signing']['SECRET_KEY'],
-#     salt=settings.WEB_DESKTOP['signing']['SALT'])
-#
-# SIGNER = Signer(
-#     settings.WEB_DESKTOP['fingerprint']['SECRET_KEY'],
-#     salt=settings.WEB_DESKTOP['fingerprint']['SALT'])
-
 guac_server = 'http://128.196.64.144:8080/guacamole'
 secret = 'secret'
 
@@ -34,12 +26,12 @@ base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
 timestamp = int(round(time.time()*1000))
 passwd = 'display'
 
-# def _should_redirect():
-#     return settings.WEB_DESKTOP['redirect']['ENABLED']
-
 def web_desktop(request):
+    
     if request.user.is_authenticated():
+
         if 'ipAddress' in request.POST:
+
             ip_address = request.POST['ipAddress']
             atmo_username = request.session.get('username','')
 
@@ -59,12 +51,7 @@ def web_desktop(request):
             request_response = requests.post(guac_server + '/api/tokens', data=request_string)
             token = json.loads(request_response.content)['authToken']
 
-            redirect_url = guac_server + '/#/client/' + base64_conn_id + '?token=' + token
-
-            response = HttpResponseRedirect(redirect_url)
-
-            # response.set_cookie('original_referer', request.META['HTTP_REFERER'],
-            #     domain=settings.WEB_DESKTOP['redirect']['COOKIE_DOMAIN'])
+            response = HttpResponseRedirect(guac_server + '/#/client/' + base64_conn_id + '?token=' + token)
 
             return response
         else:
