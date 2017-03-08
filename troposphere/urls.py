@@ -34,7 +34,8 @@ ui_urlpatterns = [
     url(r'^allocations/', views.allocations, name='allocations'),
     url(r'^web_shell$', views.web_shell),
     url(r'^web_desktop$', views.web_desktop),
-    url(r'^guac_desktop$', views.guac_desktop)
+    url(r'^guac_desktop$', views.guac_desktop),
+    url(r'^guac_shell$', views.guac_shell)
 ]
 
 # NOTE: Have to remove the leading slash on 'BASE_URL'
