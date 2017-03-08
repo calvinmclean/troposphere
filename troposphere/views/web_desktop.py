@@ -1,11 +1,6 @@
 import json
 import logging
 import time
-import uuid
-import hmac
-import hashlib
-import base64
-import requests
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -16,42 +11,56 @@ from django.template import RequestContext
 
 from itsdangerous import Signer, URLSafeTimedSerializer
 
-guac_server = 'http://128.196.64.144:8080/guacamole'
-secret = 'secret'
+logger = logging.getLogger(__name__)
 
-# Create UUID for connection ID
-conn_id = str(uuid.uuid4())
-base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
+SIGNED_SERIALIZER = URLSafeTimedSerializer(
+    settings.WEB_DESKTOP['signing']['SECRET_KEY'],
+    salt=settings.WEB_DESKTOP['signing']['SALT'])
 
-timestamp = int(round(time.time()*1000))
-passwd = 'display'
+SIGNER = Signer(
+    settings.WEB_DESKTOP['fingerprint']['SECRET_KEY'],
+    salt=settings.WEB_DESKTOP['fingerprint']['SALT'])
+
+
+def _should_redirect():
+    return settings.WEB_DESKTOP['redirect']['ENABLED']
 
 def web_desktop(request):
-    
+    """
+    Signs a redirect to transparent proxy for web desktop view.
+    """
+    template_params = {}
+
+    logger.info("POST body: %s" % request.POST)
     if request.user.is_authenticated():
+        logger.info("user is authenticated, well done.")
+        sig = None
 
         if 'ipAddress' in request.POST:
-
             ip_address = request.POST['ipAddress']
-            atmo_username = request.session.get('username','')
+            client_ip = request.META['REMOTE_ADDR']
 
-            message = str(timestamp) + 'vnc' + ip_address + '5902' + atmo_username + passwd
-            signature = hmac.new(secret, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
+            logger.info("ip_address: %s" % ip_address)
+            logger.info("client_ip: %s" % client_ip)
 
-            request_string = ('timestamp=' + str(timestamp)
-                              + '&guac.port=5902'
-                              + '&guac.username=' + atmo_username
-                              + '&guac.password=' + passwd
-                              + '&guac.protocol=vnc'
-                              + '&signature=' + signature
-                              + '&guac.hostname=' + ip_address
-                              + '&id=' + conn_id)
+            client_ip_fingerprint = SIGNER.get_signature(client_ip)
+            browser_fingerprint = SIGNER.get_signature(''.join([
+                request.META['HTTP_USER_AGENT'],
+                request.META['HTTP_ACCEPT_LANGUAGE']]))
 
-            # Send request and record the result
-            request_response = requests.post(guac_server + '/api/tokens', data=request_string)
-            token = json.loads(request_response.content)['authToken']
+            sig = SIGNED_SERIALIZER.dumps([ip_address,
+                client_ip_fingerprint,
+                browser_fingerprint])
 
-            response = HttpResponseRedirect(guac_server + '/#/client/' + base64_conn_id + '?token=' + token)
+            url = '%s?token=%s&password=display' % (
+                settings.WEB_DESKTOP['redirect']['PROXY_URL'],
+                sig)
+
+            response = HttpResponseRedirect(url)
+            response.set_cookie('original_referer', request.META['HTTP_REFERER'],
+                domain=settings.WEB_DESKTOP['redirect']['COOKIE_DOMAIN'])
+
+            logger.info("redirect response: %s" % (response))
 
             return response
         else:
