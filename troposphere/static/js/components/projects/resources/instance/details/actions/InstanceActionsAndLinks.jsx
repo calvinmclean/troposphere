@@ -67,11 +67,33 @@ export default React.createClass({
         modals.InstanceModals.reboot(this.props.instance);
     },
 
-    onWebDesktop: function(ipAddr, instance) {
-        // TODO:
-        //      move this into a utilties file
-        var CSRFToken = findCookie("tropo_csrftoken");
+    // onWebDesktop: function(ipAddr, instance) {
+    //     // TODO:
+    //     //      move this into a utilties file
+    //     var CSRFToken = findCookie("tropo_csrftoken");
+    //
+    //     // build a form to POST to web_desktop
+    //     var form = $("<form>")
+    //         .attr("method", "POST")
+    //         .attr("action", "/web_desktop")
+    //         .attr("target", "_blank");
+    //
+    //     form.append($("<input>")
+    //         .attr("type", "hidden")
+    //         .attr("name", "ipAddress")
+    //         .attr("value", ipAddr));
+    //
+    //     form.append($("<input>")
+    //         .attr("type", "hidden")
+    //         .attr("name", "csrfmiddlewaretoken")
+    //         .attr("style", "display: none;")
+    //         .attr("value", CSRFToken));
+    //
+    //     $("body").append(form);
+    //     form[0].submit();
+    // },
 
+    onWebDesktop: function(ipAddr, instance) {
         // build a form to POST to web_desktop
         var form = $("<form>")
             .attr("method", "POST")
@@ -82,12 +104,6 @@ export default React.createClass({
             .attr("type", "hidden")
             .attr("name", "ipAddress")
             .attr("value", ipAddr));
-
-        form.append($("<input>")
-            .attr("type", "hidden")
-            .attr("name", "csrfmiddlewaretoken")
-            .attr("style", "display: none;")
-            .attr("value", CSRFToken));
 
         $("body").append(form);
         form[0].submit();
@@ -214,14 +230,24 @@ export default React.createClass({
             }
         ]);
 
+        // if (webDesktopCapable && featureFlags.WEB_DESKTOP) {
+        //     linksArray.push({
+        //         label: "Open Web Desktop",
+        //         icon: "sound-stereo",
+        //         onClick: this.onWebDesktop.bind(
+        //             this,
+        //             ip_address,
+        //             this.props.instance),
+        //         openInNewWindow: true,
+        //         isDisabled: webLinksDisabled
+        //     });
+        // }
+
         if (webDesktopCapable && featureFlags.WEB_DESKTOP) {
             linksArray.push({
                 label: "Open Web Desktop",
                 icon: "sound-stereo",
-                onClick: this.onWebDesktop.bind(
-                    this,
-                    ip_address,
-                    this.props.instance),
+                onClick: this.onWebDesktop.bind(this, ip_address, this.props.instance),
                 openInNewWindow: true,
                 isDisabled: webLinksDisabled
             });

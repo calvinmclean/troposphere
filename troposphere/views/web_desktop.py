@@ -7,39 +7,58 @@ import hashlib
 import base64
 import requests
 
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseRedirect
+from django.http.request import UnreadablePostError
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext
+
+from itsdangerous import Signer, URLSafeTimedSerializer
+
 guac_server = 'http://192.168.0.60:8080/guacamole'
 SECRET_KEY = 'secret'
 
-# Create UUID for connection ID
-conn_id = str(uuid.uuid4())
-base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
+def _should_redirect():
+    return settings.WEB_DESKTOP['redirect']['ENABLED']
 
-timestamp = int(round(time.time()*1000))
+def web_desktop(request):
+    template_params = {}
 
-passwd = 'display'
+    if request.user.is_authenticated():
 
-atmo_host = '192.168.0.60'
-atmo_username = 'calvinmclean'
+        if 'ipAddress' in request.POST:
+            ip_address = request.POST['ipAddress']
+            client_ip = request.META['REMOTE_ADDR']
 
-message = str(timestamp) + 'vnc' + atmo_host + '5902' + atmo_username + passwd
-signature = hmac.new(SECRET_KEY, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
+            # Create UUID for connection ID
+            conn_id = str(uuid.uuid4())
+            base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
+            timestamp = int(round(time.time()*1000))
+            passwd = 'display'
+            atmo_username = 'calvinmclean'
 
-print 'Message is: ' + message + '\n'
-print 'Signature is: ' + signature + '\n'
+            message = str(timestamp) + 'vnc' + ip_address + '5902' + atmo_username + passwd
+            signature = hmac.new(SECRET_KEY, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
 
-request_string = ('timestamp=' + str(timestamp) +
-                 '&guac.port=5902&guac.username=' + atmo_username +
-                 '&guac.password=' + passwd +
-                 '&guac.protocol=vnc&signature=' + signature +
-                 '&guac.hostname=' + atmo_host +
-                 '&id=' + conn_id)
+            request_string = ('timestamp=' + str(timestamp) +
+                             '&guac.port=5902&guac.username=' + atmo_username +
+                             '&guac.password=' + passwd +
+                             '&guac.protocol=vnc&signature=' + signature +
+                             '&guac.hostname=' + atmo_host +
+                             '&id=' + conn_id)
 
-print 'Request string is: ' + request_string + '\n'
+            # Send request and record the result
+            request_response = requests.post(guac_server + '/api/tokens', data=request_string)
+            token = json.loads(request_response.content)['authToken']
 
-# Send request and record the result
-request_response = requests.post(guac_server + '/api/tokens', data=request_string)
-token = json.loads(request_response.content)['authToken']
+            redirect_url = 'http://192.168.0.60:8080/guacamole/#/client/' + base64_conn_id + '?token=' + token
+            response = HttpResponseRedirect(redirect_url)
 
-print 'Token is: ' + token + '\n'
+            return response
+        else:
+            raise UnreadablePostError
 
-print 'URL is: http://192.168.0.60:8080/guacamole/#/client/' + base64_conn_id + '?token=' + token
+    else:
+        logger.info("not authenticated: \nrequest:\n %s" % request)
+        raise PermissionDenied
