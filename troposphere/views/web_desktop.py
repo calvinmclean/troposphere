@@ -16,8 +16,16 @@ from django.template import RequestContext
 
 from itsdangerous import Signer, URLSafeTimedSerializer
 
+SIGNED_SERIALIZER = URLSafeTimedSerializer(
+    settings.WEB_DESKTOP['signing']['SECRET_KEY'],
+    salt=settings.WEB_DESKTOP['signing']['SALT'])
+
+SIGNER = Signer(
+    settings.WEB_DESKTOP['fingerprint']['SECRET_KEY'],
+    salt=settings.WEB_DESKTOP['fingerprint']['SALT'])
+
 guac_server = 'http://128.196.64.144:8080/guacamole'
-SECRET_KEY = 'secret'
+secret = 'secret'
 
 # Create UUID for connection ID
 conn_id = str(uuid.uuid4())
@@ -38,7 +46,7 @@ def web_desktop(request):
             atmo_username = request.session.get('username','')
 
             message = str(timestamp) + 'vnc' + ip_address + '5902' + atmo_username + passwd
-            signature = hmac.new(SECRET_KEY, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
+            signature = hmac.new(secret, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
 
             request_string = ('timestamp=' + str(timestamp)
                               + '&guac.port=5902'
@@ -54,7 +62,11 @@ def web_desktop(request):
             token = json.loads(request_response.content)['authToken']
 
             redirect_url = guac_server + '/#/client/' + base64_conn_id + '?token=' + token
+
             response = HttpResponseRedirect(redirect_url)
+
+            response.set_cookie('original_referer', request.META['HTTP_REFERER'],
+                domain=settings.WEB_DESKTOP['redirect']['COOKIE_DOMAIN'])
 
             return response
         else:
