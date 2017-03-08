@@ -40,12 +40,14 @@ def web_desktop(request):
             message = str(timestamp) + 'vnc' + ip_address + '5902' + atmo_username + passwd
             signature = hmac.new(SECRET_KEY, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
 
-            request_string = ('timestamp=' + str(timestamp) +
-                             '&guac.port=5902&guac.username=' + atmo_username +
-                             '&guac.password=' + passwd +
-                             '&guac.protocol=vnc&signature=' + signature +
-                             '&guac.hostname=' + atmo_host +
-                             '&id=' + conn_id)
+            request_string = ('timestamp=' + str(timestamp)
+                              + '&guac.port=5902'
+                              + '&guac.username=' + atmo_username
+                              + '&guac.password=' + passwd
+                              + '&guac.protocol=vnc'
+                              + '&signature=' + signature
+                              + '&guac.hostname=' + atmo_host
+                              + '&id=' + conn_id)
 
             # Send request and record the result
             request_response = requests.post(guac_server + '/api/tokens', data=request_string)
