@@ -16,13 +16,13 @@ from django.template import RequestContext
 
 from itsdangerous import Signer, URLSafeTimedSerializer
 
-SIGNED_SERIALIZER = URLSafeTimedSerializer(
-    settings.WEB_DESKTOP['signing']['SECRET_KEY'],
-    salt=settings.WEB_DESKTOP['signing']['SALT'])
-
-SIGNER = Signer(
-    settings.WEB_DESKTOP['fingerprint']['SECRET_KEY'],
-    salt=settings.WEB_DESKTOP['fingerprint']['SALT'])
+# SIGNED_SERIALIZER = URLSafeTimedSerializer(
+#     settings.WEB_DESKTOP['signing']['SECRET_KEY'],
+#     salt=settings.WEB_DESKTOP['signing']['SALT'])
+#
+# SIGNER = Signer(
+#     settings.WEB_DESKTOP['fingerprint']['SECRET_KEY'],
+#     salt=settings.WEB_DESKTOP['fingerprint']['SALT'])
 
 guac_server = 'http://128.196.64.144:8080/guacamole'
 secret = 'secret'
@@ -34,13 +34,11 @@ base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
 timestamp = int(round(time.time()*1000))
 passwd = 'display'
 
-def _should_redirect():
-    return settings.WEB_DESKTOP['redirect']['ENABLED']
+# def _should_redirect():
+#     return settings.WEB_DESKTOP['redirect']['ENABLED']
 
 def web_desktop(request):
-
     if request.user.is_authenticated():
-
         if 'ipAddress' in request.POST:
             ip_address = request.POST['ipAddress']
             atmo_username = request.session.get('username','')
@@ -54,7 +52,7 @@ def web_desktop(request):
                               + '&guac.password=' + passwd
                               + '&guac.protocol=vnc'
                               + '&signature=' + signature
-                              + '&guac.hostname=' + atmo_host
+                              + '&guac.hostname=' + ip_address
                               + '&id=' + conn_id)
 
             # Send request and record the result
@@ -65,8 +63,8 @@ def web_desktop(request):
 
             response = HttpResponseRedirect(redirect_url)
 
-            response.set_cookie('original_referer', request.META['HTTP_REFERER'],
-                domain=settings.WEB_DESKTOP['redirect']['COOKIE_DOMAIN'])
+            # response.set_cookie('original_referer', request.META['HTTP_REFERER'],
+            #     domain=settings.WEB_DESKTOP['redirect']['COOKIE_DOMAIN'])
 
             return response
         else:
