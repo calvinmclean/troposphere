@@ -101,13 +101,18 @@ export default React.createClass({
         // build a form to POST to web_desktop
         var form = $("<form>")
             .attr("method", "POST")
-            .attr("action", "/guac_desktop")
+            .attr("action", "/guacamole")
             .attr("target", "_blank");
 
         form.append($("<input>")
             .attr("type", "hidden")
             .attr("name", "ipAddress")
             .attr("value", ipAddr));
+
+        form.append($("<input>")
+            .attr("type", "hidden")
+            .attr("name", "protocol")
+            .attr("value", "vnc"));
 
         form.append($("<input>")
             .attr("type", "hidden")
@@ -127,13 +132,18 @@ export default React.createClass({
         // build a form to POST to web_desktop
         var form = $("<form>")
             .attr("method", "POST")
-            .attr("action", "/guac_shell")
+            .attr("action", "/guacamole")
             .attr("target", "_blank");
 
         form.append($("<input>")
             .attr("type", "hidden")
             .attr("name", "ipAddress")
             .attr("value", ipAddr));
+
+        form.append($("<input>")
+            .attr("type", "hidden")
+            .attr("name", "protocol")
+            .attr("value", "ssh"));
 
         form.append($("<input>")
             .attr("type", "hidden")
