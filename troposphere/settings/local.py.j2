@@ -116,6 +116,15 @@ WEB_DESKTOP = {
     }
 }
 
+GUACAMOLE = {
+    'signing': {
+        'SECRET_KEY': '{{ GUACAMOLE_SECRET_KEY }}',
+    },
+    'server': {
+        'SERVER_URL': '{{ GUACAMOLE_SERVER_URL }}'
+    }
+}
+
 # DATABASE
 DATABASES = {
     "default": {
