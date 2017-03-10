@@ -9,7 +9,7 @@ import requests
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 
-guac_server = 'http://128.196.64.144:8080/guacamole'
+guac_server = 'http://128.196.64.157:8080/guacamole'
 secret = 'secret'
 
 # Create UUID for connection ID

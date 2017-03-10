@@ -9,7 +9,7 @@ import requests
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 
-guac_server = 'http://128.196.64.144:8080/guacamole'
+guac_server = 'http://128.196.64.157:8080/guacamole'
 secret = 'secret'
 
 # Create UUID for connection ID
@@ -28,11 +28,11 @@ def guac_desktop(request):
             ip_address = request.POST['ipAddress']
             atmo_username = request.session.get('username','')
 
-            message = str(timestamp) + 'vnc' + ip_address + '5902' + atmo_username + passwd
+            message = str(timestamp) + 'vnc' + ip_address + '5901' + atmo_username + passwd
             signature = hmac.new(secret, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
 
             request_string = ('timestamp=' + str(timestamp)
-                              + '&guac.port=5902'
+                              + '&guac.port=5901'
                               + '&guac.username=' + atmo_username
                               + '&guac.password=' + passwd
                               + '&guac.protocol=vnc'
