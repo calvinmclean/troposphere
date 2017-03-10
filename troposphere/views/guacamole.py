@@ -17,19 +17,19 @@ conn_id = str(uuid.uuid4())
 base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
 
 timestamp = int(round(time.time()*1000))
-passwd = 'display'
 
 def guacamole(request):
 
     if request.user.is_authenticated():
 
-        if 'ipAddress' in request.POST and 'ipAddress' in request.POST:
+        if 'ipAddress' in request.POST and 'protocol' in request.POST:
 
             ip_address = request.POST['ipAddress']
             protocol = request.POST['protocol']
             atmo_username = request.session.get('username','')
 
             port = '5901'
+            passwd = 'display'
             if protocol == 'ssh':
                 port = '22'
                 passwd = ''
