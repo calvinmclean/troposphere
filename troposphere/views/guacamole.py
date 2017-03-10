@@ -17,23 +17,31 @@ conn_id = str(uuid.uuid4())
 base64_conn_id = base64.b64encode(conn_id[2:] + "\0" + 'c' + "\0" + 'hmac')
 
 timestamp = int(round(time.time()*1000))
+passwd = 'display'
 
-def guac_shell(request):
+def guac_desktop(request):
 
     if request.user.is_authenticated():
 
-        if 'ipAddress' in request.POST:
+        if 'ipAddress' in request.POST and 'ipAddress' in request.POST:
 
             ip_address = request.POST['ipAddress']
+            protocol = request.POST['protocol']
             atmo_username = request.session.get('username','')
 
-            message = str(timestamp) + 'ssh' + ip_address + '22' + atmo_username
+            port = '5901'
+            if protocol == 'ssh':
+                port = '22'
+                passwd = ''
+
+            message = str(timestamp) + protocol + ip_address + port + atmo_username + passwd
             signature = hmac.new(secret, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
 
             request_string = ('timestamp=' + str(timestamp)
-                              + '&guac.port=22'
+                              + '&guac.port=' + port
                               + '&guac.username=' + atmo_username
-                              + '&guac.protocol=ssh'
+                              + '&guac.password=' + passwd
+                              + '&guac.protocol=' + protocol
                               + '&signature=' + signature
                               + '&guac.hostname=' + ip_address
                               + '&id=' + conn_id)
