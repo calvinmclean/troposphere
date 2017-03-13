@@ -5,18 +5,23 @@ import hmac
 import hashlib
 import base64
 import requests
+import logging
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 
+logger = logging.getLogger(__name__)
+
 guac_server = settings.GUACAMOLE['SERVER_URL']
 secret = settings.GUACAMOLE['SECRET_KEY']
 
-
+# This function will be called by a POST request made to the URL /guacamole from a button
+# defined in troposphere/static/js/components/projects/resources/instance/details/actions/InstanceActionsAndLinks.jsx
 def guacamole(request):
 
     if request.user.is_authenticated():
+        logger.info("User is authenticated.")
 
         # Create UUID for connection ID
         conn_id = str(uuid.uuid4())
@@ -46,6 +51,7 @@ def guacamole(request):
 
             # Hash the message into a signature
             signature = hmac.new(secret, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
+            logger.info("Signature computed to be %s from the message %s" % (signature, message))
 
             # Build the POST request
             request_string = ('timestamp=' + timestamp
@@ -58,12 +64,15 @@ def guacamole(request):
                               + '&id=' + conn_id)
 
             # Send request to Guacamole backend and record the result
-            request_response = requests.post(guac_server + '/api/tokens', data=request_string)
-            token = json.loads(request_response.content)['authToken']
+            response = requests.post(guac_server + '/api/tokens', data=request_string)
+            token = json.loads(response.content)['authToken']
+
+            logger.info("Response from server: %s" % (response))
 
             return HttpResponseRedirect(guac_server + '/#/client/' + base64_conn_id + '?token=' + token)
         else:
             raise UnreadablePostError
 
     else:
+        logger.info("User not authenticated.\n Failed request: %s" % (request))
         raise PermissionDenied
