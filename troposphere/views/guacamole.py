@@ -66,7 +66,7 @@ def guacamole(request):
 
             # Send request to Guacamole backend and record the result
             response = requests.post(guac_server + '/api/tokens', data=request_string)
-            logger.info("Response status from server: %s" % (response.status))
+            logger.info("Response status from server: %s" % (response.status_code))
 
             if response.status_code == 403:
                 logger.warn("Guacamole did not accept the authentication.\nResponse content:\n%s" % (json.loads(response.content)))
