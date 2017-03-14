@@ -37,6 +37,8 @@ def guacamole(request):
             protocol = request.POST['protocol']
             atmo_username = request.session.get('username','')
 
+            logger.info("User %s initiated %s connection to %s" % (atmo_username, protocol.upper(), ip_address))
+
             # Change some parameters depending on SSH or VNC protocol
             # Note: passwd is hardcoded to 'display'. This doesn't seem ideal but it is
             #       done the same in web_desktop.py
@@ -51,7 +53,6 @@ def guacamole(request):
 
             # Hash the message into a signature
             signature = hmac.new(secret, message, hashlib.sha256).digest().encode("base64").rstrip('\n')
-            logger.info("Signature computed to be %s from the message %s" % (signature, message))
 
             # Build the POST request
             request_string = ('timestamp=' + timestamp
@@ -65,14 +66,16 @@ def guacamole(request):
 
             # Send request to Guacamole backend and record the result
             response = requests.post(guac_server + '/api/tokens', data=request_string)
+            logger.info("Response status from server: %s" % (response.status))
+
+            if response.status_code == 403:
+                logger.warn("Guacamole did not accept the authentication.\nResponse content:\n%s" % (json.loads(response.content)))
+                return HttpResponse("<h1>Error 403</h1><br/>Guacamole server did not accept authentication.")
+
             token = json.loads(response.content)['authToken']
-
-            logger.info("Response from server: %s" % (response))
-
             return HttpResponseRedirect(guac_server + '/#/client/' + base64_conn_id + '?token=' + token)
         else:
             raise UnreadablePostError
 
     else:
-        logger.info("User not authenticated.\n Failed request: %s" % (request))
         raise PermissionDenied
