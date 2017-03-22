@@ -273,18 +273,21 @@ export default React.createClass({
                 href: webShellUrl,
                 openInNewWindow: true,
                 isDisabled: webLinksDisabled
-            },
-            {
-                label: "Open Guacamole Shell",
-                icon: "console",
-                onClick: this.onGuacShell.bind(
-                    this,
-                    ip_address,
-                    this.props.instance),
-                openInNewWindow: true,
-                isDisabled: webLinksDisabled
             }
         ]);
+
+        if ( featureFlags.GUACAMOLE ) {
+          linksArray.push({
+              label: "Open Guacamole Shell",
+              icon: "console",
+              onClick: this.onGuacShell.bind(
+                  this,
+                  ip_address,
+                  this.props.instance),
+              openInNewWindow: true,
+              isDisabled: webLinksDisabled
+          });
+        }
 
         if (webDesktopCapable && featureFlags.WEB_DESKTOP) {
             linksArray.push({
@@ -298,16 +301,18 @@ export default React.createClass({
                 isDisabled: webLinksDisabled
             });
 
-            linksArray.push({
+            if ( featureFlags.GUACAMOLE ) {
+              linksArray.push({
                 label: "Open Guacamole Desktop",
                 icon: "sound-stereo",
                 onClick: this.onGuacDesktop.bind(
-                    this,
-                    ip_address,
-                    this.props.instance),
-                openInNewWindow: true,
-                isDisabled: webLinksDisabled
-            });
+                  this,
+                  ip_address,
+                  this.props.instance),
+                  openInNewWindow: true,
+                  isDisabled: webLinksDisabled
+                });
+            }
         }
 
         var links = linksArray.map(function(link) {
