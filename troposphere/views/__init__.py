@@ -5,3 +5,4 @@ from .allocations import allocations
 from .auth import login, logout, cas_oauth_service
 from .emulation import emulate, unemulate
 from .maintenance import get_maintenance, maintenance, atmo_maintenance
+from .report_image import report_image

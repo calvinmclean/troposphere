@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 import React from "react";
 import Backbone from "backbone";
 
@@ -9,6 +11,7 @@ import DescriptionView from "./description/DescriptionView";
 import VisibilityView from "./visibility/VisibilityView";
 import Gravatar from "components/common/Gravatar";
 import Ribbon from "components/common/Ribbon";
+
 
 import stores from "stores";
 
@@ -62,6 +65,26 @@ export default React.createClass({
         }
     },
 
+    reportImage: function() {
+        var form = $("<form>")
+            .attr("method", "POST")
+            .attr("action", "/report_image")
+            .attr("target", "_blank");
+        //TODO: Create report_image.py view in troposphere/views
+        form.append($("<input>")
+            .attr("type", "hidden")
+            .attr("name", "image_id")
+            .attr("value", this.props.image.get("id")));
+
+        form.append($("<input>")
+            .attr("type", "hidden")
+            .attr("name", "username")
+            .attr("value", stores.ProfileStore.get().get("username")));
+
+        $("body").append(form);
+        form[0].submit();
+    },
+
     render: function() {
         let { image, tags } = this.props,
             type = stores.ProfileStore.get().get("icon_set");
@@ -85,6 +108,15 @@ export default React.createClass({
             }
         };
 
+        let reportButton = (
+            <button
+                className="btn btn-primary launch-button"
+                onClick={ this.reportImage }
+            >
+                Report
+            </button>
+        );
+
         return (
             <div style={ style.wrapper }>
                 <div style={ style.img }>
@@ -101,6 +133,7 @@ export default React.createClass({
                         <DescriptionView image={ image } />
                         <VisibilityView image={ image } />
                         <TagsView image={ image } tags={ tags } />
+                        {reportButton}
                     </div>
                     { this.renderEditLink() }
                 </div>
