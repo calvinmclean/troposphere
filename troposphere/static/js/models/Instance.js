@@ -213,6 +213,7 @@ export default Backbone.Model.extend({
             "resize - resize_finish",
             "active - networking",
             "active - deploying",
+            "active - deploying_user_customizations",
             "active - initializing",
             "active - shelving",
             "active - shelving_image_pending_upload",

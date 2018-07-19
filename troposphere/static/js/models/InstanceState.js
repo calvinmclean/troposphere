@@ -86,6 +86,7 @@ var get_percent_complete = function(state, activity) {
                 deploying: 70,
                 shelving_image_pending_upload: 65,
                 shelving_image_uploading: 88,
+                deploying_user_customizations: 90,
                 running_boot_script: 90
             },
             hard_reboot: {

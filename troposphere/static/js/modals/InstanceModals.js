@@ -11,6 +11,7 @@ import IStopModal from "./instance/stop";
 import ISuspendModal from "./instance/suspend";
 import IShelveModal from "./instance/shelve";
 import IUnshelveModal from "./instance/unshelve";
+import IUserCustomizations from "./instance/userCustomizations";
 
 export default {
     createAndAddToProject: ICreateModal.createAndAddToProject,
@@ -25,5 +26,6 @@ export default {
     stop: IStopModal.stop,
     suspend: ISuspendModal.suspend,
     shelve: IShelveModal.shelve,
-    unshelve: IUnshelveModal.unshelve
+    unshelve: IUnshelveModal.unshelve,
+    userCustomizations: IUserCustomizations.userCustomizations
 };

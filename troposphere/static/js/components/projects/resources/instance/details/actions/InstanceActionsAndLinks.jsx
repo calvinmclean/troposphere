@@ -83,6 +83,12 @@ export default React.createClass({
                 onClick: this.onRedeploy
             },
             {
+                key: "UserCustomizations",
+                label: "User Customizations (beta)",
+                icon: "check",
+                onClick: this.onUserCustomizations
+            },
+            {
                 key: InstanceActionNames.DELETE,
                 label: "Delete",
                 icon: "remove",
@@ -186,6 +192,10 @@ export default React.createClass({
 
     onUnshelve: function() {
         modals.InstanceModals.unshelve(this.props.instance);
+    },
+
+    onUserCustomizations: function() {
+        modals.InstanceModals.userCustomizations(this.props.instance);
     },
 
     onWebDesktop: function(instance, client, protocol) {
