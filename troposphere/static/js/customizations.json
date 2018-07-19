@@ -1,0 +1,107 @@
+[
+    {
+        "label": "Option One",
+        "name": "OptionOne",
+        "description": "this playbook does things",
+        "args": [
+            {
+                "name": "arg1",
+                "description": "arg1 is used for x"
+            },
+            {
+                "name": "arg2",
+                "description": "arg2 is used for y"
+            }
+        ]
+    },
+    {
+        "label": "Option Two",
+        "name": "OptionTwo",
+        "description": "this playbook does things",
+        "args": [
+            {
+                "name": "arg1",
+                "description": "arg1 is used for x"
+            },
+            {
+                "name": "arg2",
+                "description": "arg2 is used for y"
+            }
+        ]
+    },
+    {
+        "label": "Option Three",
+        "name": "OptionThree",
+        "description": "this playbook does things",
+        "args": [
+            {
+                "name": "arg1",
+                "description": "arg1 is used for x"
+            },
+            {
+                "name": "arg2",
+                "description": "arg2 is used for y"
+            }
+        ]
+    },
+    {
+        "label": "Option Four",
+        "name": "OptionFour",
+        "description": "this playbook does things",
+        "args": [
+            {
+                "name": "arg1",
+                "description": "arg1 is used for x"
+            },
+            {
+                "name": "arg2",
+                "description": "arg2 is used for y"
+            }
+        ]
+    },
+    {
+        "label": "Option Five",
+        "name": "OptionFive",
+        "description": "this playbook does things",
+        "args": [
+            {
+                "name": "arg1",
+                "description": "arg1 is used for x"
+            },
+            {
+                "name": "arg2",
+                "description": "arg2 is used for y"
+            }
+        ]
+    },
+    {
+        "label": "Option Six",
+        "name": "OptionSix",
+        "description": "this playbook does things",
+        "args": [
+            {
+                "name": "arg1",
+                "description": "arg1 is used for x"
+            },
+            {
+                "name": "arg2",
+                "description": "arg2 is used for y"
+            }
+        ]
+    },
+    {
+        "label": "Option Seven",
+        "name": "OptionSeven",
+        "description": "this playbook does things",
+        "args": [
+            {
+                "name": "arg1",
+                "description": "arg1 is used for x"
+            },
+            {
+                "name": "arg2",
+                "description": "arg2 is used for y"
+            }
+        ]
+    }
+]
