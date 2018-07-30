@@ -45,6 +45,7 @@ function launch(params) {
         size,
         machine,
         scripts,
+        userCustomizations,
         onSuccess,
         onFail
     } = params;
@@ -93,6 +94,7 @@ function launch(params) {
         size_alias: size.get("alias"),
         source_alias: machine.uuid,
         scripts: scripts,
+        user_customizations: userCustomizations,
         project: project
     };
 

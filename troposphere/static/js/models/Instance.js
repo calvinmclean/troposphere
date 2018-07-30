@@ -90,6 +90,7 @@ export default Backbone.Model.extend({
             source = options.source_alias,
             project = options.project.get("uuid"),
             allocation_source_id = options.allocation_source_id,
+            user_customizations = options.user_customizations,
             scripts = options.scripts
                 ? options.scripts.map(function(script) {
                       return script.get("uuid");
@@ -104,6 +105,7 @@ export default Backbone.Model.extend({
             allocation_source_id,
             name,
             scripts,
+            user_customizations,
             project,
             identity
         };

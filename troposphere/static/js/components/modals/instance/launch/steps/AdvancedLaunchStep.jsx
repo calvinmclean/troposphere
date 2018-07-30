@@ -1,6 +1,7 @@
 import React from "react";
 import BootScriptOption from "../components/BootScriptOption";
 import AdvancedOptionsFooter from "../components/AdvancedOptionsFooter";
+import UserCustomizations from "../components/UserCustomizations";
 
 export default React.createClass({
     getInitialState: function() {
@@ -8,10 +9,16 @@ export default React.createClass({
             view: "BOOTSCRIPT_VIEW",
             footerDisabled: false,
 
+            selectedOptions: this.props.selectedOptions,
+
             options: [
                 {
                     name: "Deployment Scripts",
                     view: "BOOTSCRIPT_VIEW"
+                },
+                {
+                    name: "User Customizations (beta)",
+                    view: "USER_CUSTOMIZATIONS_VIEW"
                 }
                 // This is for testing options sidebar,
                 // to add new options add them to this object and follow the pattern starting with renderBody below.
@@ -50,6 +57,8 @@ export default React.createClass({
         switch (view) {
             case "BOOTSCRIPT_VIEW":
                 return this.renderBootScripts();
+            case "USER_CUSTOMIZATIONS_VIEW":
+                return this.renderUserCustomizations();
             case "OPTION2_VIEW":
                 return this.renderOption2();
             case "OPTION3_VIEW":
@@ -77,6 +86,12 @@ export default React.createClass({
                 onDisableFooter={this.onDisableFooter}
                 onEnableFooter={this.onEnableFooter}
             />
+        );
+    },
+
+    renderUserCustomizations: function() {
+        return (
+            <UserCustomizations selectedOptions={this.state.selectedOptions} />
         );
     },
 

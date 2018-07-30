@@ -81,6 +81,7 @@ export default React.createClass({
             identityProvider: null,
             attachedScripts: [],
             allocationSource: null,
+            selectedOptions: [],
             waitingOnLaunch: false
         };
     },
@@ -536,6 +537,7 @@ export default React.createClass({
                 size: this.state.providerSize,
                 version: this.state.imageVersion,
                 scripts: this.state.attachedScripts,
+                userCustomizations: this.state.selectedOptions,
                 onSuccess: () => {
                     this.onLaunchSuccess();
                 },
@@ -818,6 +820,7 @@ export default React.createClass({
         return (
             <AdvancedLaunchStep
                 bootScriptList={bootScriptList}
+                selectedOptions={this.state.selectedOptions}
                 attachedScripts={this.state.attachedScripts}
                 onAddAttachedScript={this.onAddAttachedScript}
                 onRemoveAttachedScript={this.onRemoveAttachedScript}
