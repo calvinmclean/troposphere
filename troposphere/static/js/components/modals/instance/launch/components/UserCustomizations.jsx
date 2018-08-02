@@ -13,32 +13,15 @@ export default React.createClass({
 
     toggleCheckbox: function(name) {
         var selectedOptions = this.state.selectedOptions;
-        // Find the object with the name and then get the index of it
-        var index = selectedOptions.indexOf(selectedOptions.find(x => x.name == name));
+        // Get the index of this item in the list
+        var index = selectedOptions.indexOf(name);
 
+        // Add the new item if it is not in the list, remove if it is
         if (index == -1) {
-          // Create a dict of the args for the newly selected playbook
-          var playbookArgs = {};
-          this.state.customizations.filter(pb => pb.name == name).map(pb => pb.args.map(arg => playbookArgs[arg.name] = ""));
-          var newSelection = {
-              "name": name,
-              "args": playbookArgs
-          }
-          selectedOptions.push(newSelection);
+          selectedOptions.push(name);
         } else {
           selectedOptions.splice(index, 1);
         }
-        this.setState({
-            selectedOptions: selectedOptions
-        });
-    },
-
-    enterArguments: function(e) {
-        var selectedOptions = this.state.selectedOptions;
-        var pbObject = selectedOptions.find(x => x.name == e.target.id);
-        var index = selectedOptions.indexOf(pbObject);
-        pbObject.args[e.target.name] = e.target.value;
-        selectedOptions.splice(index, 1, pbObject);
         this.setState({
             selectedOptions: selectedOptions
         });
@@ -61,7 +44,6 @@ export default React.createClass({
                         description={item.description}
                         args={item.args}
                         handleToggle={this.toggleCheckbox}
-                        onArgChange={this.enterArguments}
                         key={index}
                     />
                 })}
