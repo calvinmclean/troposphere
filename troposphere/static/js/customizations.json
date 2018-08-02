@@ -2,106 +2,36 @@
     {
         "label": "Option One",
         "name": "OptionOne",
-        "description": "this playbook does things",
-        "args": [
-            {
-                "name": "arg1",
-                "description": "arg1 is used for x"
-            },
-            {
-                "name": "arg2",
-                "description": "arg2 is used for y"
-            }
-        ]
+        "description": "this playbook does things"
     },
     {
         "label": "Option Two",
         "name": "OptionTwo",
-        "description": "this playbook does things",
-        "args": [
-            {
-                "name": "arg1",
-                "description": "arg1 is used for x"
-            },
-            {
-                "name": "arg2",
-                "description": "arg2 is used for y"
-            }
-        ]
+        "description": "this playbook does things"
     },
     {
-        "label": "Option Three",
-        "name": "OptionThree",
-        "description": "this playbook does things",
-        "args": [
-            {
-                "name": "arg1",
-                "description": "arg1 is used for x"
-            },
-            {
-                "name": "arg2",
-                "description": "arg2 is used for y"
-            }
-        ]
+        "label": "bowtie2",
+        "name": "bowtie2",
+        "description": "Bowtie2 is a popular tool for aligning sequencing reads to long reference sequences"
     },
     {
-        "label": "Option Four",
-        "name": "OptionFour",
-        "description": "this playbook does things",
-        "args": [
-            {
-                "name": "arg1",
-                "description": "arg1 is used for x"
-            },
-            {
-                "name": "arg2",
-                "description": "arg2 is used for y"
-            }
-        ]
+        "label": "Kanki iRods Client",
+        "name": "kanki",
+        "description": "This installs a graphical iRods client and will only work on instances with a GUI"
     },
     {
-        "label": "Option Five",
-        "name": "OptionFive",
-        "description": "this playbook does things",
-        "args": [
-            {
-                "name": "arg1",
-                "description": "arg1 is used for x"
-            },
-            {
-                "name": "arg2",
-                "description": "arg2 is used for y"
-            }
-        ]
+        "label": "Docker",
+        "name": "docker",
+        "description": "Install the Docker containerization tool"
     },
     {
-        "label": "Option Six",
-        "name": "OptionSix",
-        "description": "this playbook does things",
-        "args": [
-            {
-                "name": "arg1",
-                "description": "arg1 is used for x"
-            },
-            {
-                "name": "arg2",
-                "description": "arg2 is used for y"
-            }
-        ]
+        "label": "Velvet",
+        "name": "velvet",
+        "description": "Installs Velvet, a sequence assembler for very short reads"
     },
     {
-        "label": "Option Seven",
-        "name": "OptionSeven",
-        "description": "this playbook does things",
-        "args": [
-            {
-                "name": "arg1",
-                "description": "arg1 is used for x"
-            },
-            {
-                "name": "arg2",
-                "description": "arg2 is used for y"
-            }
-        ]
+        "label": "Cufflinks",
+        "name": "cufflinks",
+        "description": "Installs Cufflinks, a tool for transcriptome assembly and differential expression analysis for RNA-Seq"
     }
 ]
