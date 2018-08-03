@@ -40,7 +40,7 @@ export default React.createClass({
                         </div>
                         <div className="modal-body">
                             <form onSubmit={this.confirm}>
-                                <UserCustomizations selectedOptions={this.state.selectedOptions} />
+                                <UserCustomizations selectedOptions={this.state.selectedOptions} instance={this.props.instance} />
                             </form>
                         </div>
                         <div className="modal-footer">

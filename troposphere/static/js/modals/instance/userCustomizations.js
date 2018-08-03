@@ -5,7 +5,7 @@ import actions from "actions";
 
 export default {
     userCustomizations: function(instance) {
-        ModalHelpers.renderModal(InstanceUserCustomizationsModal, null, function(selectedOptions) {
+        ModalHelpers.renderModal(InstanceUserCustomizationsModal, {instance: instance}, function(selectedOptions) {
             actions.InstanceActions.userCustomizations({
                 instance: instance,
                 selectedOptions: selectedOptions

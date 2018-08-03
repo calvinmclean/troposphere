@@ -64,6 +64,7 @@ export default Backbone.Model.extend({
                     );
                     this.set("web_desktop", attrs.web_desktop);
                     this.set("vnc", attrs.has_vnc);
+                    this.set("user_customizations", attrs.user_customizations);
                     cb(response);
                 }.bind(this)
             )

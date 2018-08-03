@@ -16,6 +16,11 @@ export default React.createClass({
         // Get the index of this item in the list
         var index = selectedOptions.indexOf(name);
 
+        // Modify the props.instance object to immediately reflect changes in UI
+        if (this.props.instance) {
+            this.modifyInstanceObject(name);
+        }
+
         // Add the new item if it is not in the list, remove if it is
         if (index == -1) {
           selectedOptions.push(name);
@@ -25,6 +30,18 @@ export default React.createClass({
         this.setState({
             selectedOptions: selectedOptions
         });
+    },
+
+    modifyInstanceObject: function(name) {
+        var index = this.state.selectedOptions.indexOf(name);
+        var instanceUserCustomizations = this.props.instance.attributes.user_customizations;
+
+        if (index == -1) {
+            instanceUserCustomizations.push(name);
+        } else {
+            instanceUserCustomizations.splice(instanceUserCustomizations.indexOf(name), 1);
+        }
+        this.props.instance.attributes.user_customizations = instanceUserCustomizations;
     },
 
     render: function() {
@@ -45,6 +62,7 @@ export default React.createClass({
                         args={item.args}
                         handleToggle={this.toggleCheckbox}
                         key={index}
+                        instance={this.props.instance}
                     />
                 })}
             </div>
