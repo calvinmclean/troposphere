@@ -6,6 +6,9 @@ import Tooltip from "react-tooltip";
 const deployError =
     "Performing a 'hard reboot' will sometimes fix a 'deploy_error' on an instance";
 
+const userDeployError =
+    "'user_deploy_error' was caused by a failure in non-critical tasks and your instance still functions normally";
+
 var Activity = React.createClass({
     displayName: "Activity",
 
@@ -35,7 +38,14 @@ var Activity = React.createClass({
             attention,
             activity = instance.get("state").get("activity") || "N/A";
 
+        var errorType;
         if (activity && activity === "deploy_error") {
+            errorType = deployError;
+        } else if (activity && activity === "user_deploy_error") {
+            errorType = userDeployError;
+        }
+
+        if (errorType) {
             let rand = Math.random() + "",
                 {opacity} = this.state,
                 marginLeft = "10px",
@@ -47,7 +57,7 @@ var Activity = React.createClass({
                         onMouseOver={this.onMouseOver}
                         onMouseOut={this.onMouseOut}
                         style={{opacity, marginLeft, color}}
-                        data-tip={deployError}
+                        data-tip={errorType}
                         className="glyphicon glyphicon-info-sign"
                         data-for={rand}
                         aria-hidden="true"
