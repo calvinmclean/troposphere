@@ -66,9 +66,12 @@ const APITokenConfiguration = React.createClass({
         // Set a key that lexicograhically sorts first by title then by cid.
         // Cannot sort by id, because recently created bootscript has no id
         let key = apiToken.get("name") + apiToken.cid;
+        let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+        let expireTime = new Date(apiToken.get("expireTime")).toLocaleString('en-GB', options);
         return (
             <tr key={key}>
                 <td style={td}>{apiToken.get("name")}</td>
+                <td style={td}>{expireTime}</td>
                 <td>
                     <a onClick={this.launchEditModal.bind(this, apiToken)}>
                         <i className="glyphicon glyphicon-pencil" />
@@ -106,6 +109,7 @@ const APITokenConfiguration = React.createClass({
                         <thead>
                             <tr>
                                 <th style={{width: "100%"}}>Name</th>
+                                <th style={{width: "100%"}}>Expiration</th>
                                 <th style={{width: "60px"}}>Actions</th>
                             </tr>
                         </thead>
