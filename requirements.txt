@@ -54,7 +54,7 @@ pyopenssl==17.2.0         # via requests
 pyparsing==2.2.0          # via oslo.utils
 python-dateutil==2.6.1
 python-keystoneclient==3.12.0  # via django-cyverse-auth
-python-ldap==2.4.41       # via django-cyverse-auth
+python-ldap      # via django-cyverse-auth
 pytz==2017.2              # via babel, django, oslo.serialization, oslo.utils
 pyyaml==3.12              # via oslo.config
 raven==6.1.0
