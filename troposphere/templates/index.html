@@ -125,8 +125,9 @@
     var GUACAMOLE_ENABLED = "{{ GUACAMOLE_ENABLED }}";
 {% endif %}
 
-// TODO: Set this to use template variable
-var THEME_NAME = "jetstream_theme";
+{% if THEME_NAME %}
+var THEME_NAME = "{{ THEME_NAME }}";
+{% endif %}
 
 {% if show_public_site %}
     var show_public_site = true;
