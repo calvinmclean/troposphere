@@ -77,6 +77,8 @@ RUN useradd user
 
 # Prepare entrypoint
 RUN cp docker/entrypoint.sh /root/entrypoint.sh && \
+    cp docker/test.sh /root/test.sh && \
     chmod +x /root/entrypoint.sh && \
+    chmod +x /root/test.sh && \
     echo "source /opt/env/troposphere/bin/activate" >> /root/.bashrc
 ENTRYPOINT ["/root/entrypoint.sh"]
