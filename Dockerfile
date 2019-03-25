@@ -71,7 +71,7 @@ RUN apt-get autoremove -y && \
 
 # Setup NGINX
 RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 1024 && \
-    cp -r docker/nginx/ /etc/nginx/
+    cp -r docker/nginx/ /etc/
 
 RUN useradd user
 
