@@ -1,6 +1,5 @@
 #!/bin/bash
 
-git clone https://github.com/cyverse/troposphere.git /opt/dev/troposphere
 cd /opt/dev/troposphere
 
 apt-get update && apt-get install -y postgresql python-pip
