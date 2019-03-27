@@ -10,9 +10,6 @@ pip install pip-tools==1.11.0
 echo "Waiting for postgres..."
 while ! nc -z postgres 5432; do sleep 5; done
 
-psql -c "CREATE USER troposphere_db_user WITH PASSWORD 'troposphere_db_pass' CREATEDB;" -U postgres
-psql -c "CREATE DATABASE troposphere_db WITH OWNER troposphere_db_user;" -U postgres
-
 pip install -r dev_requirements.txt
 npm install
 sed -i 's/DATABASE_HOST = localhost/DATABASE_HOST = postgres/' variables.ini.dist
